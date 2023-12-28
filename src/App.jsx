@@ -1,16 +1,13 @@
+import React from "react"
+import Title from "./components/Title/Title.jsx"
 
-
-
-function App() {
-
+const App = () => {
 
   return (
-    <>
-      
-    <h1>Text Editor</h1>
-      
-    </>
-  )
+    <div>
+      <Title />
+    </div>
+  );
 }
 
 export default App
