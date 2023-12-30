@@ -27,6 +27,16 @@ const DraftEditor = () => {
     return 'not-handled';
   };
   
+  const editorStyle = {
+    width: '98%',        
+    height: '87vh',
+    border: '2px solid blue',
+    padding: '10px',
+    borderRadius: '8px',
+    backgroundColor: 'white',
+    overflow: 'hidden',
+    margin: '0 auto',  
+  };
  
 
   const combinedStyleMap = {
@@ -35,8 +45,7 @@ const DraftEditor = () => {
     },
     BLACK_LINE: {
       borderBottom: '2px solid black', 
-    },
-    
+    }
   };
 
   return (
