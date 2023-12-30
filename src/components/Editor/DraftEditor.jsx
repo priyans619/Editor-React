@@ -1,62 +1,51 @@
 import React, { useState } from 'react';
-import { Editor, EditorState, RichUtils, Modifier, SelectionState } from 'draft-js';
+import { Editor, EditorState } from 'draft-js';
+import { HeadingInputComponent } from './HeadingInputComponent';
+import { BoldInputComponent } from './BoldInputComponent';
+import { RedTextInputComponent } from './RedTextInputComponent';
+import { BlackLineInputComponent } from './BlackLineInputComponent';
 
 const DraftEditor = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  const onChange = (newEditorState) => {
-    setEditorState(newEditorState);
-  };
-
-  const handleBeforeInput = (chars, editorState) => {
-    const selection = editorState.getSelection();
-    if (!selection.isCollapsed() || chars !== ' ') {
-      return 'not-handled';
-    }
-
-    const currentContent = editorState.getCurrentContent();
-    const currentBlock = currentContent.getBlockForKey(selection.getStartKey());
-    const blockText = currentBlock.getText();
-
-    if (blockText === '#') {
-      const blockKey = currentBlock.getKey();
-
-      // this willl replace the # with empty string
-      const newContentState = Modifier.replaceText(
-        currentContent,
-        selection.merge({
-          anchorOffset: 0,
-          focusOffset: 1,
-        }),
-        ''
-      );
-
-      let newEditorState = EditorState.push(editorState, newContentState, 'change-block-data');
-      newEditorState = RichUtils.toggleBlockType(newEditorState, 'header-one');
-
-      const newSelection = new SelectionState({
-        anchorKey: blockKey,
-        anchorOffset: 0,
-        focusKey: blockKey,
-        focusOffset: 0,
-      });
-      newEditorState = EditorState.forceSelection(newEditorState, newSelection);
-
-      setEditorState(newEditorState);
+  const handleBeforeInput = (chars) => {
+    if (HeadingInputComponent({ editorState, setEditorState })(chars, editorState) === 'handled') {
       return 'handled';
     }
 
-    return 'not-handled';
-  }
+    if (BoldInputComponent({ editorState, setEditorState })(chars, editorState) === 'handled') {
+      return 'handled';
+    }
+    if (RedTextInputComponent({ editorState, setEditorState })(chars, editorState) === 'handled') {
+      return 'handled';
+    }
+    if (BlackLineInputComponent({ editorState, setEditorState })(chars, editorState) === 'handled') {
+      return 'handled';
+    }
+    
 
+    return 'not-handled';
+  };
+  
  
 
+  const combinedStyleMap = {
+    RED_TEXT: {
+      color: 'red', 
+    },
+    BLACK_LINE: {
+      borderBottom: '2px solid black', 
+    },
+    
+  };
+
   return (
-    <div>
+    <div style={editorStyle}>
       <Editor
         editorState={editorState}
-        onChange={onChange}
+        onChange={setEditorState}
         handleBeforeInput={handleBeforeInput}
+        customStyleMap={combinedStyleMap}
       />
     </div>
   );
