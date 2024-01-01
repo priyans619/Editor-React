@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { Editor, EditorState } from 'draft-js';
+import React from 'react';
+import { Editor } from 'draft-js';
 import { HeadingInputComponent } from './HeadingInputComponent';
 import { BoldInputComponent } from './BoldInputComponent';
 import { RedTextInputComponent } from './RedTextInputComponent';
 import { BlackLineInputComponent } from './BlackLineInputComponent';
 
-const DraftEditor = () => {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+const DraftEditor = ({ editorState, setEditorState }) => {
 
   const handleBeforeInput = (chars) => {
     if (HeadingInputComponent({ editorState, setEditorState })(chars, editorState) === 'handled') {
@@ -26,7 +25,8 @@ const DraftEditor = () => {
 
     return 'not-handled';
   };
-  
+
+
   const editorStyle = {
     width: '98%',        
     height: '87vh',
